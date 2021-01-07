@@ -32,7 +32,6 @@ public class SelenideTest {
                     .get(i)
                     .shouldHave(Condition.type("checkbox"));
         }
-        sleep(2000);
     }
 
     @Test(priority = 2)
@@ -42,7 +41,6 @@ public class SelenideTest {
         $(byId("dropdown"))
                 .shouldHave(Condition.selectedText(""))
                 .selectOptionByValue("2");
-        sleep(2000);
     }
 
     @Test(priority = 3)
