@@ -17,33 +17,24 @@ public class SelenideTest {
         Configuration.startMaximized = true;
     }
 
-    @Test(priority = 1)
+    @Test
     public void testCase() {
         open("http://the-internet.herokuapp.com/checkboxes");
-        $$(byAttribute("type", "checkbox"))
-                .get(0)
-                .setSelected(true);
-        $$(byAttribute("type", "checkbox"))
-                .get(0)
-                .shouldBe(Condition.checked);
+        $$(byAttribute("type", "checkbox")).get(0).setSelected(true);
+        $$(byAttribute("type", "checkbox")).get(0).shouldBe(Condition.checked);
 
         for (int i = 0; i < $$(byAttribute("type", "checkbox")).size(); i++) {
-            $$(byAttribute("type", "checkbox"))
-                    .get(i)
-                    .shouldHave(Condition.type("checkbox"));
+            $$(byAttribute("type", "checkbox")).get(i).shouldHave(Condition.type("checkbox"));
         }
     }
 
-    @Test(priority = 2)
+    @Test
     public void testCase2() {
         open("http://the-internet.herokuapp.com/dropdown");
-//        Select select = new Select($(byId("dropdown")));
-        $(byId("dropdown"))
-                .shouldHave(Condition.selectedText(""))
-                .selectOptionByValue("2");
+        $(byId("dropdown")).shouldHave(Condition.selectedText("")).selectOptionByValue("2");
     }
 
-    @Test(priority = 3)
+    @Test
     public void testCase3() {
         String[] values = {"Mikheil Soziashvili", "lulamiminaso17@gmail.com", "Address 1", "Address 2"};
 
@@ -52,7 +43,7 @@ public class SelenideTest {
         $("input[placeholder *= '@']").setValue(values[1]);
         $(byAttribute("placeholder","Current Address")).setValue(values[2]);
         $(byTagName("div")).$(byId("permanentAddress")).setValue(values[3]);
-        $("#submit").click();
+        $("#submit").scrollIntoView(true).click();
 
         List<SelenideElement> output  = $("#output").$$("div");
 
