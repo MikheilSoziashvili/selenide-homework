@@ -2,6 +2,7 @@ import com.codeborne.selenide.AssertionMode;
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.FileDownloadMode;
+import com.codeborne.selenide.impl.DownloadFileToFolder;
 import com.codeborne.selenide.testng.ScreenShooter;
 import com.codeborne.selenide.testng.SoftAsserts;
 import org.testng.annotations.BeforeClass;
@@ -14,6 +15,7 @@ import java.io.FileNotFoundException;
 import static com.codeborne.selenide.CollectionCondition.size;
 import static com.codeborne.selenide.Selenide.*;
 import static com.codeborne.selenide.Selectors.*;
+import static com.codeborne.selenide.files.FileFilters.withNameMatching;
 
 @Listeners({SoftAsserts.class, ScreenShooter.class})
 public class SelenideBasics2Test {
@@ -25,7 +27,7 @@ public class SelenideBasics2Test {
     public void setup() {
         Configuration.startMaximized = true;
         Configuration.baseUrl = "https://demoqa.com";
-        Configuration.timeout = 7000;
+        Configuration.timeout = 4000;
         Configuration.assertionMode=AssertionMode.SOFT;
         Configuration.downloadsFolder = downloadPath.getAbsolutePath();
         Configuration.screenshots = true;
@@ -51,9 +53,16 @@ public class SelenideBasics2Test {
         }
     }
     @Test
-    public void testCase2() throws FileNotFoundException {
+    public void testCase2() {
         open("/upload-download");
-        File file = $(byLinkText("Download")).download();
+
+        try {
+            $("#downloadButton").download();
+        } catch (FileNotFoundException e) {
+            System.out.println("ignore exception");
+        }
+
+        File file = new File(downloadPath.getAbsolutePath());
 
         if (file.exists()) {
             System.out.println("downloaded");
