@@ -42,14 +42,11 @@ public class SelenideBasics2Test {
 
         // Failed Case
         Condition publisherAndTitle = Condition.and("titleAndPublisher", Condition.text("JavaScript"), Condition.text("O'Reilly Media"));
-        $(".rt-tbody").findAll(".rt-tr-group")
-                .filterBy(publisherAndTitle)
-                .shouldHave(size(10));
+        $(".rt-tbody").findAll(".rt-tr-group").filterBy(publisherAndTitle).shouldHave(size(10));
 
         // Success Case
         for (int i = 0; i < $$(".rt-tr-group").size()-2; i++) {
-            // -2 იმიტომ რომ დროში ვიყავი შეზღუდული და უფრო დინამიური გზა ვერ ვიპოვე
-            // ბოლო 2 ელემენტი ცარიელია
+            // -2 იმიტომ რომ დროში ვიყავი შეზღუდული და უფრო დინამიური გზა ვერ ვიპოვე, ბოლო 2 ელემენტი ცარიელია
             $$(".rt-tr-group").get(i).findAll(".rt-td").get(0).$("img").shouldHave(Condition.image);
         }
     }
