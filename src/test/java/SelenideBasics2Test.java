@@ -1,4 +1,8 @@
-import com.codeborne.selenide.*;
+import com.codeborne.selenide.AssertionMode;
+import com.codeborne.selenide.Condition;
+import com.codeborne.selenide.Configuration;
+import com.codeborne.selenide.FileDownloadMode;
+import com.codeborne.selenide.testng.ScreenShooter;
 import com.codeborne.selenide.testng.SoftAsserts;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Listeners;
@@ -9,8 +13,9 @@ import java.io.FileNotFoundException;
 
 import static com.codeborne.selenide.CollectionCondition.size;
 import static com.codeborne.selenide.Selenide.*;
+import static com.codeborne.selenide.Selectors.*;
 
-@Listeners({SoftAsserts.class})
+@Listeners({SoftAsserts.class, ScreenShooter.class})
 public class SelenideBasics2Test {
 
     File downloadPath = new File("src/test/Downloads");
@@ -20,17 +25,20 @@ public class SelenideBasics2Test {
     public void setup() {
         Configuration.startMaximized = true;
         Configuration.baseUrl = "https://demoqa.com";
-        Configuration.timeout = 600;
+        Configuration.timeout = 7000;
         Configuration.assertionMode=AssertionMode.SOFT;
         Configuration.downloadsFolder = downloadPath.getAbsolutePath();
         Configuration.screenshots = true;
         Configuration.reportsFolder = screenshotsPath.getAbsolutePath();
-        Configuration.fileDownload= FileDownloadMode.HTTPGET;
+        Configuration.proxyEnabled = true;
+        Configuration.fileDownload= FileDownloadMode.PROXY;
     }
 
     @Test
     public void testCase() {
         open("/books");
+
+        ScreenShooter.captureSuccessfulTests = true;
 
         // Failed Case
         Condition publisherAndTitle = Condition.and("titleAndPublisher", Condition.text("JavaScript"), Condition.text("O'Reilly Media"));
@@ -46,22 +54,14 @@ public class SelenideBasics2Test {
         }
     }
     @Test
-    public void testCase2() {
+    public void testCase2() throws FileNotFoundException {
         open("/upload-download");
+        File file = $(byLinkText("Download")).download();
 
-        try {
-            $("#downloadButton").download();
-        } catch (FileNotFoundException e) {
-            System.out.println("no file");
+        if (file.exists()) {
+            System.out.println("downloaded");
+        } else {
+            System.out.println("not downloaded");
         }
-
-
-        sleep(2000);
-
-//        if (file.exists()) {
-//            System.out.println("Downloaded");
-//        } else {
-//            System.out.println("Not Downloaded");
-//        }
     }
 }
