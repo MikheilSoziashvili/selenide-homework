@@ -42,7 +42,7 @@ public class SelenideTest {
         $("#userName").setValue(values[0]);
         $("input[placeholder *= '@']").setValue(values[1]);
         $(byAttribute("placeholder","Current Address")).setValue(values[2]);
-        $(byTagName("div")).$(byId("permanentAddress")).setValue(values[3]);
+        $(("div")).$(byId("permanentAddress")).setValue(values[3]);
         $("#submit").scrollIntoView(true).click();
 
         List<SelenideElement> output  = $("#output").$$("div");
